@@ -59,8 +59,10 @@ public class BlogPostService {
 
     //does the query once
     @Transactional
-    public boolean deleteBlogPost(Long id){
-        return repository.deleteByIdCustom(id) > 0;
+    public void deleteBlogPost(Long id){
+        if(repository.deleteByIdCustom(id) <= 0){
+            throw new BlogPostNotFoundException(id);
+        }
     }
 }
 

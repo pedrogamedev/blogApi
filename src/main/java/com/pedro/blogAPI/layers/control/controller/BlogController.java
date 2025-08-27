@@ -36,13 +36,7 @@ public class BlogController {
 
     @GetMapping("/blogPost")
     public ResponseEntity<EntityModel<BlogPostResponse>> getBlogPost(@RequestParam(name = "id") Long id){
-        try{
-
             return ResponseEntity.ok().body(assembler.toModel(service.getBlogPostById(id)));
-        }
-        catch (BlogPostNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id not found.");
-        }
     }
 
     /*
@@ -54,29 +48,16 @@ public class BlogController {
     //validate the body and param
     @PatchMapping("/blogPost")
     public ResponseEntity<EntityModel<BlogPostResponse>> updateBlogPost(
-
             @RequestParam(name = "id") Long id, @RequestBody BlogPostRequest request){
         //check if there is at least one value in the request body json
-        try {
             return ResponseEntity.ok().body(assembler.toModel(service.updateBlogPost(request, id)));
-        }
-        catch (BlogPostNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id not found.");
-        }
     }
 
     //validate the request param
     @DeleteMapping("/blogPost")
     public ResponseEntity<Void> deleteBlogPost(@RequestParam(name = "id") Long id){
-        try{
-
-            if(service.deleteBlogPost(id)){
-                return ResponseEntity.noContent().build();
-            }
-            throw new BlogPostNotFoundException(id);
-        }
-        catch (BlogPostNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id not found.");
-        }
+            service.deleteBlogPost(id);
+            return ResponseEntity.noContent().build();
     }
 }
+
