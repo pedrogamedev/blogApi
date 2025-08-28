@@ -41,7 +41,7 @@ public class GlobalControllerExceptionHandler {
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ProblemDetail handleArgumentTypeMismatchExcetion(MethodArgumentTypeMismatchException exception){
+    public ProblemDetail handleArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
                 exception.getMessage()
