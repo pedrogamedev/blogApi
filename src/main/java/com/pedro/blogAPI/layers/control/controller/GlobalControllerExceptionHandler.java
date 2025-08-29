@@ -1,6 +1,7 @@
 package com.pedro.blogAPI.layers.control.controller;
 
 import com.pedro.blogAPI.miscelaneous.exceptions.BlogPostNotFoundException;
+import com.pedro.blogAPI.miscelaneous.exceptions.EmptyDatabaseException;
 import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -32,7 +33,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleMethodArgumentNotFoundException(MethodArgumentNotValidException exception){
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND,
+                HttpStatus.BAD_REQUEST,
                 exception.getMessage()
         );
         detail.setTitle("Invalid request.");
@@ -43,7 +44,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ProblemDetail handleArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND,
+                HttpStatus.BAD_REQUEST,
                 exception.getMessage()
         );
         detail.setTitle("Invalid request.");
@@ -52,13 +53,24 @@ public class GlobalControllerExceptionHandler {
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ProblemDetail handleInvalidEnumAsMethodArgument(HttpMessageNotReadableException exception){
+    public ProblemDetail handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
 
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND,
+                HttpStatus.BAD_REQUEST,
                 exception.getMessage()
         );
         detail.setTitle("Invalid request.");
+        detail.setType(URI.create("none"));
+        return detail;
+    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(EmptyDatabaseException.class)
+    public ProblemDetail handleEmptyDatabaseException(EmptyDatabaseException exception){
+        ProblemDetail detail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NO_CONTENT,
+                exception.getMessage()
+        );
+        detail.setTitle("Empty DB.");
         detail.setType(URI.create("none"));
         return detail;
     }

@@ -6,12 +6,15 @@ import com.pedro.blogAPI.layers.domain.model.BlogPost;
 import com.pedro.blogAPI.layers.repository.BlogRepository;
 import com.pedro.blogAPI.layers.service.mapper.BlogPostMapper;
 import com.pedro.blogAPI.miscelaneous.exceptions.BlogPostNotFoundException;
+import com.pedro.blogAPI.miscelaneous.exceptions.EmptyDatabaseException;
 import com.pedro.blogAPI.miscelaneous.utils.NullUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -37,11 +40,13 @@ public class BlogPostService {
         return mapper.toBlogPostResponse(blogPost);
     }
 
-    /*
     public List<BlogPostResponse> getAllBlogPost(){
-
+        List<BlogPostResponse> responses = mapper.toBlogPostResponseList(repository.findAll());
+         if(responses.isEmpty()){
+             throw new EmptyDatabaseException();
+         }
+         return responses;
     }
-*/
 
     @Transactional
     public BlogPostResponse updateBlogPost(BlogPostRequest request, Long id){

@@ -13,10 +13,8 @@ public class BlogApiApplication {
 }
 //to-do
 /*
-	validate requestParams and requestBody (when there are empty, null or invalid values)
-	getAll blogPosts
 	filtering
 	testing
 	openAPI swagger UI implementation
 	docker
- */
+*/

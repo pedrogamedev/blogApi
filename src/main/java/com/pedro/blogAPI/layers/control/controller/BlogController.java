@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,16 +35,17 @@ public class BlogController {
     }
 
     @GetMapping("/blogPost")
-    public ResponseEntity<EntityModel<BlogPostResponse>> getBlogPost( @NotNull @RequestParam(name = "id") Long id){
+    public ResponseEntity<EntityModel<BlogPostResponse>> getBlogPost(
+            @NotNull @NotBlank @RequestParam(name = "id", required = false) Long id)
+    {
             return ResponseEntity.ok().body(assembler.toModel(service.getBlogPostById(id)));
     }
 
-    /*
-    @GetMapping("/blogPost")
-    public ResponseEntity<CollectionModel<EntityModel<blogPostResponse>>> getAllBlogPosts() {
-
+    @GetMapping("/blogPost/all")
+    public ResponseEntity<CollectionModel<EntityModel<BlogPostResponse>>> getAllBlogPosts() {
+        return ResponseEntity.ok().body(assembler.toCollectionModel(service.getAllBlogPost()));
     }
-*/
+
     //validate the body and param
     @PatchMapping("/blogPost")
     public ResponseEntity<EntityModel<BlogPostResponse>> updateBlogPost(
