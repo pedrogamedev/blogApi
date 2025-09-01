@@ -4,19 +4,15 @@ import com.pedro.blogAPI.layers.control.assembler.BlogPostResponseModelAssembler
 import com.pedro.blogAPI.layers.domain.dto.BlogPostRequest;
 import com.pedro.blogAPI.layers.domain.dto.BlogPostResponse;
 import com.pedro.blogAPI.layers.service.services.BlogPostService;
-import com.pedro.blogAPI.miscelaneous.exceptions.BlogPostNotFoundException;
+import com.pedro.blogAPI.miscelaneous.exceptions.InvalidParameterException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
@@ -36,9 +32,19 @@ public class BlogController {
 
     @GetMapping("/blogPost")
     public ResponseEntity<EntityModel<BlogPostResponse>> getBlogPost(
-            @NotNull @NotBlank @RequestParam(name = "id", required = false) Long id)
+             @RequestParam(name = "id") Long id)
     {
-            return ResponseEntity.ok().body(assembler.toModel(service.getBlogPostById(id)));
+                return ResponseEntity.ok().body(assembler.toModel(service.getBlogPostById(id)));
+    }
+    @GetMapping("/blogPost/search")
+    public ResponseEntity<CollectionModel<EntityModel<BlogPostResponse>>> getBlogPostsByTerm(
+           @RequestParam(name = "term") String term
+    )
+    {
+        if(term.isBlank()){
+            throw new InvalidParameterException("term");
+        }
+        return ResponseEntity.ok().body(assembler.toCollectionModel(service.getBlogPostByTerm(term)));
     }
 
     @GetMapping("/blogPost/all")
@@ -49,7 +55,7 @@ public class BlogController {
     //validate the body and param
     @PatchMapping("/blogPost")
     public ResponseEntity<EntityModel<BlogPostResponse>> updateBlogPost(
-             @NotNull @RequestParam(name = "id") Long id, @RequestBody BlogPostRequest request){
+            @RequestParam(name = "id") Long id, @RequestBody BlogPostRequest request){
         //check if there is at least one value in the request body json
             return ResponseEntity.ok().body(assembler.toModel(service.updateBlogPost(request, id)));
     }

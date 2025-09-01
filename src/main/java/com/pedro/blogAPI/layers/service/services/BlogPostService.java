@@ -7,6 +7,7 @@ import com.pedro.blogAPI.layers.repository.BlogRepository;
 import com.pedro.blogAPI.layers.service.mapper.BlogPostMapper;
 import com.pedro.blogAPI.miscelaneous.exceptions.BlogPostNotFoundException;
 import com.pedro.blogAPI.miscelaneous.exceptions.EmptyDatabaseException;
+import com.pedro.blogAPI.miscelaneous.exceptions.NoBlogPostsFoundException;
 import com.pedro.blogAPI.miscelaneous.utils.NullUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,14 @@ public class BlogPostService {
         if(repository.deleteByIdCustom(id) <= 0){
             throw new BlogPostNotFoundException(id);
         }
+    }
+
+    public List<BlogPostResponse> getBlogPostByTerm(String term) {
+        List<BlogPostResponse> responses = mapper.toBlogPostResponseList(repository.findByTerm(term));
+        if(responses.isEmpty()){
+            throw new NoBlogPostsFoundException(term);
+        }
+        return responses;
     }
 }
 
