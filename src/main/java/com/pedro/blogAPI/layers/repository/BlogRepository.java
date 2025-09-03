@@ -20,10 +20,10 @@ public interface BlogRepository extends JpaRepository<BlogPost, Long> {
     @Query("DELETE FROM BlogPost b WHERE b.id = :id")
     int deleteByIdCustom(@Param("id") Long id);
 
-    @Query("SELECT b FROM BlogPost b WHERE "+
-    "LOWER(b.title) LIKE LOWER(CONCAT('%', :term, '%')) OR "+
-    "LOWER(b.content) LIKE LOWER(CONCAT('%', :term, '%')) OR "+
-    "LOWER(CAST (b.category AS string)) LIKE LOWER(CONCAT('%', :term, '%'))")
+    @Query("SELECT b FROM BlogPost b WHERE " +
+            "LOWER(b.title) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+            "LOWER(b.content) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
+            "LOWER(b.category) LIKE LOWER(CONCAT('%', :term, '%'))")
     List<BlogPost> findByTerm(@Param("term") String term);
 
 }

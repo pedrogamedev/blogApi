@@ -13,8 +13,7 @@ public class BlogApiApplication {
 }
 //to-do
 /*
-	filtering
-	testing
 	openAPI swagger UI implementation
+	-  e add schemas no final
 	docker
 */

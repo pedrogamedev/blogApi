@@ -3,6 +3,7 @@ package com.pedro.blogAPI.layers.control.controller;
 import com.pedro.blogAPI.miscelaneous.exceptions.BlogPostNotFoundException;
 import com.pedro.blogAPI.miscelaneous.exceptions.EmptyDatabaseException;
 import com.pedro.blogAPI.miscelaneous.exceptions.NoBlogPostsFoundException;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Priority;
 import jakarta.validation.ConstraintDefinitionException;
 import jakarta.validation.ConstraintViolationException;
